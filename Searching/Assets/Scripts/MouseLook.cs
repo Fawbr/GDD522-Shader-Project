@@ -18,17 +18,26 @@ public class MouseLook
     private Quaternion m_CameraTargetRot;
     private bool m_cursorIsLocked = true;
 
-    public void Init(Transform character, Transform camera)
+    private Vector2 rawRot;
+    
+
+    public void Init(Transform character, Transform camera,InputReader Input)
     {
         m_CharacterTargetRot = character.localRotation;
         m_CameraTargetRot = camera.localRotation;
+        Input.AimingEvent += HandelRawRot;
     }
 
 
     public void LookRotation(Transform character, Transform camera)
     {
-        float yRot = Input.GetAxis("Mouse X") * XSensitivity;
-        float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
+        float yRot = (rawRot.x / 2) * XSensitivity;
+        float xRot =  (rawRot.y / 2) * YSensitivity;
+
+        //Debug.Log("Mine: " + rawRot.x + " Unity RAW:" + Input.GetAxisRaw("Mouse X") + " Unity:" + Input.GetAxis("Mouse X"));
+
+        //float yRot = Input.GetAxis("Mouse X") * XSensitivity;
+        //float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
         m_CharacterTargetRot *= Quaternion.Euler (0f, yRot, 0f);
         m_CameraTargetRot *= Quaternion.Euler (-xRot, 0f, 0f);
 
@@ -106,6 +115,11 @@ public class MouseLook
         q.x = Mathf.Tan (0.5f * Mathf.Deg2Rad * angleX);
 
         return q;
+    }
+
+    private void HandelRawRot(Vector2 input)
+    {
+        rawRot = (input / 2) / 10;
     }
 
 }

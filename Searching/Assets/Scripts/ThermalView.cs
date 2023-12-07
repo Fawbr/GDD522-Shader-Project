@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 public class ThermalView : MonoBehaviour
@@ -9,6 +10,8 @@ public class ThermalView : MonoBehaviour
     [SerializeField] Volume postProcessingVolume;
     [SerializeField] VolumeProfile postProfile;
     [SerializeField] Camera thermalCam;
+    [SerializeField] Image staticImage;
+
     ColorAdjustments thermalHueShift;
     public bool thermalEnabled = false;
 
@@ -26,11 +29,13 @@ public class ThermalView : MonoBehaviour
             if (thermalEnabled)
             {
                 thermalEnabled = false;
+                staticImage.enabled = false;
                 thermalHueShift.active = false;
             }
             else
             {
                 thermalEnabled = true;
+                staticImage.enabled = true;
                 thermalHueShift.active = true;
             }
         }
