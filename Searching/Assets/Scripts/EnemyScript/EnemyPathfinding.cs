@@ -6,10 +6,10 @@ public class EnemyPathfinding : MonoBehaviour
 {
     [SerializeField] Transform playerTarget;
     [SerializeField] GameObject currentWaypoint;
+    [SerializeField] float enemySpeed = 3f;
     List<GameObject> nodeChoices = new List<GameObject>();
     List<GameObject> nodesTravelled = new List<GameObject>();
     EnemyFieldOfView enemyFOV;
-    float enemySpeed = 3f;
     Rigidbody rb;
     Animator enemyAnimator;
     GameObject nextNode;
@@ -89,7 +89,7 @@ public class EnemyPathfinding : MonoBehaviour
                 }
                 else
                 {
-                    enemySpeed = 3f;
+                    enemySpeed = 15f;
                 }
             }
 
@@ -101,7 +101,7 @@ public class EnemyPathfinding : MonoBehaviour
         if (other.tag == "Player")
         {
             enemyAnimator.SetTrigger("Moving");
-            enemySpeed = 3f;
+            enemySpeed = 15f;
         }
     }
 

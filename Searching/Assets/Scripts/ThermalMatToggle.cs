@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class ThermalMatToggle : MonoBehaviour
 {
-    [SerializeField] ThermalView thermalView;
+    [SerializeField] CameraViews thermalView;
     [SerializeField] Material thermalMat;
     [SerializeField] Material regularMat;
 
