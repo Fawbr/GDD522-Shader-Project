@@ -14,10 +14,12 @@ public class CameraViews : MonoBehaviour
     [SerializeField] Camera thermalCam;
     [SerializeField] Camera enemyCam;
     [SerializeField] Image staticImage;
-
+    [SerializeField] BatteryScript batteryScript;
     ColorAdjustments thermalHueShift;
     ColorAdjustments enemyHueShift;
     Bloom thermalBloom;
+    bool thermalSwitch = false;
+    bool enemySwitch = false;
     public bool thermalEnabled = false;
     public bool enemyViewEnabled = false;
     
@@ -33,7 +35,7 @@ public class CameraViews : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && batteryScript.thermalBattery >= 0f)
         {
             if (enemyHueShift)
             {
@@ -59,7 +61,7 @@ public class CameraViews : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && batteryScript.enemyBattery >= 0f)
         {
             if (thermalEnabled)
             {
@@ -78,12 +80,39 @@ public class CameraViews : MonoBehaviour
             }
             else
             {
+                Debug.Log("aaa");
                 enemyCam.enabled = true;
                 enemyViewEnabled = true;
                 staticImage.enabled = true;
                 enemyHueShift.active = true;
+                Debug.Log(staticImage.isActiveAndEnabled);
             }
         }
- 
+
+        if (batteryScript.thermalBattery <= 0f)
+        {
+            if (thermalSwitch == false)
+            {
+                thermalCam.enabled = false;
+                thermalEnabled = false;
+                staticImage.enabled = false;
+                thermalHueShift.active = false;
+                thermalBloom.active = false;
+                thermalSwitch = true;
+            }
+        }
+
+        if (batteryScript.enemyBattery <= 0f)
+        {
+            if (enemySwitch == false)
+            {
+                enemyCam.enabled = false;
+                enemyViewEnabled = false;
+                staticImage.enabled = false;
+                enemyHueShift.active = false;
+                enemySwitch = true;
+            }
+        }
+
     }
 }

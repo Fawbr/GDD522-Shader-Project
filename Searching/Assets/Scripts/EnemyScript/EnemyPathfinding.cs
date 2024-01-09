@@ -34,14 +34,11 @@ public class EnemyPathfinding : MonoBehaviour
         Debug.Log(enemyFOV.playerVisible);
         nMA.speed = enemySpeed;
         Transform waypointTransform = currentWaypoint.transform;
-        if (Vector3.Distance(transform.position, waypointTransform.position) < 1)
-        {
-            nodesTravelled.Add(currentWaypoint);
-            currentWaypoint = FindNextWayPoint();
-        }
+
         if (enemyFOV.playerVisible == true)
         {
             nMA.SetDestination(playerTarget.position);
+            enemySpeed = 10f;
             //nMA.speed = 7;
             
         }
@@ -58,20 +55,18 @@ public class EnemyPathfinding : MonoBehaviour
         WaypointDetection waypointNodes = currentWaypoint.GetComponent<WaypointDetection>();
         foreach (GameObject node in waypointNodes.nearbyWaypoints)
         {
-            if (nodeAmount > 1)
-            {
-                if ((nodesTravelled[nodeAmount - 2] != node))
-                {
-                    nodeChoices.Add(node);
-                }
-            }
-            else
-            {
-                nodeChoices.Add(node);
-            }
+            nodeChoices.Add(node);
+        }
+        Debug.Log(nodeChoices.Count);
+        if (nodeChoices.Count > 1)
+        {
+            nextNodeInt = Random.Range(0, nodeChoices.Count);
+        }
+        else
+        {
+            nextNodeInt = 0;
         }
 
-        nextNodeInt = Random.Range(0, nodeChoices.Count);
         nextNode = nodeChoices[nextNodeInt];
         nodeChoices.Clear();
         return nextNode;
@@ -111,15 +106,24 @@ public class EnemyPathfinding : MonoBehaviour
                         EnemyTeleportAway();
                         time = 0f;
                     }
-                    
+
                 }
                 else
                 {
                     time = 0f;
-                    enemySpeed = 15f;
+                    enemySpeed = 5f;
                 }
             }
+        }
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Waypoints")
+        {
+            nodesTravelled.Add(currentWaypoint);
+            currentWaypoint = FindNextWayPoint();
+            Debug.Log(currentWaypoint.name);
         }
     }
 
@@ -128,7 +132,7 @@ public class EnemyPathfinding : MonoBehaviour
         if (other.tag == "Player")
         {
             enemyAnimator.SetTrigger("Moving");
-            enemySpeed = 15f;
+            enemySpeed = 5f;
         }
     }
 
