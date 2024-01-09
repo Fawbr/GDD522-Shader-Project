@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class InteractionScript : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI text;
-    int bodiesCollected = 0;
+    public int bodiesCollected = 0;
     Camera playerCam;
     float time = 0f;
     bool disappear = false;

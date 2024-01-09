@@ -6,19 +6,23 @@ using UnityEngine.Rendering;
 public class ThermalMatToggle : MonoBehaviour
 {
     [SerializeField] CameraViews thermalView;
-    [SerializeField] Material thermalMat;
-    [SerializeField] Material regularMat;
+    SkinnedMeshRenderer visibilityToggle;
+    private void Start()
+    {
+        thermalView = FindObjectOfType<CameraViews>();
+        visibilityToggle = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (thermalView.thermalEnabled)
         {
-            gameObject.GetComponent<Renderer>().material = thermalMat;
+            visibilityToggle.enabled = true;
         }
-        else
+        if (!thermalView.thermalEnabled)
         {
-            gameObject.GetComponent<Renderer>().material = regularMat;
+            visibilityToggle.enabled = false;
         }
     }
 }

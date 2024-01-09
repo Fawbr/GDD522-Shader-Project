@@ -9,12 +9,14 @@ public class EnemyPathfinding : MonoBehaviour
     [SerializeField] float enemySpeed = 3f;
     List<GameObject> nodeChoices = new List<GameObject>();
     List<GameObject> nodesTravelled = new List<GameObject>();
+    GameObject[] allNodes;
     EnemyFieldOfView enemyFOV;
     Rigidbody rb;
     Animator enemyAnimator;
     GameObject nextNode;
     private NavMeshAgent nMA;
     int nextNodeInt;
+    float time;
     EnemyView enemyView;
     void Start()
     {
@@ -23,11 +25,13 @@ public class EnemyPathfinding : MonoBehaviour
         enemyFOV = GetComponent<EnemyFieldOfView>();
         nMA = GetComponent<NavMeshAgent>();
         enemyAnimator = GetComponentInChildren<Animator>();
+        allNodes = GameObject.FindGameObjectsWithTag("Waypoints");
 
     }
 
     void Update()
     {
+        Debug.Log(enemyFOV.playerVisible);
         nMA.speed = enemySpeed;
         Transform waypointTransform = currentWaypoint.transform;
         if (Vector3.Distance(transform.position, waypointTransform.position) < 1)
@@ -72,7 +76,22 @@ public class EnemyPathfinding : MonoBehaviour
         nodeChoices.Clear();
         return nextNode;
     }
+    private void EnemyTeleportAway()
+    {
+        List<GameObject> possibleNodes = new List<GameObject>();
+        foreach (GameObject waypoints in allNodes)
+        {
+            if (Vector3.Distance(playerTarget.transform.position, waypoints.transform.position) >= 20f)
+            {
+                Debug.Log(Vector3.Distance(playerTarget.transform.position, waypoints.transform.position));
+                possibleNodes.Add(waypoints);
+            }
+        }
 
+        int chosenNode = Random.Range(0, possibleNodes.Count);
+        nextNode = possibleNodes[chosenNode];
+        transform.position = new Vector3(possibleNodes[chosenNode].transform.position.x, transform.position.y, possibleNodes[chosenNode].transform.position.z);
+    }
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Player")
@@ -86,9 +105,17 @@ public class EnemyPathfinding : MonoBehaviour
                     rb.MoveRotation(Quaternion.LookRotation(playerTarget.transform.position - transform.position));
                     enemyAnimator.SetTrigger("Idling");
                     nMA.velocity = new Vector3(0, 0, 0);
+                    time += Time.deltaTime;
+                    if (time >= 3f)
+                    {
+                        EnemyTeleportAway();
+                        time = 0f;
+                    }
+                    
                 }
                 else
                 {
+                    time = 0f;
                     enemySpeed = 15f;
                 }
             }
