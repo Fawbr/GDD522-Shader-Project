@@ -1,46 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
+using TMPro;
 
-public class InteractionScript : MonoBehaviour
+public class BatteryPickup : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI text;
-    public int bodiesCollected = 0;
-    Camera playerCam;
+    public int batteriesOwned = 0;
+    [SerializeField] Camera playerCam;
     float time = 0f;
     bool disappear = false;
     [SerializeField] LayerMask layerMask;
-    CameraViews cameraView;
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerCam = gameObject.GetComponentInChildren<Camera>();
-        cameraView = gameObject.GetComponentInChildren<CameraViews>();
-    }
-
+    [SerializeField] CameraViews cameraView;
+    [SerializeField] ObjectSpawning objectSpawning;
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, playerCam.transform.TransformDirection(Vector3.forward), out hit, 10, layerMask))
             {
                 Debug.Log(hit.transform.name);
-                if (hit.transform.tag == "Item" && cameraView.thermalEnabled)
-                { 
-                    bodiesCollected++;
+                if (hit.transform.tag == "Battery")
+                {
+                    batteriesOwned++;
                     hit.transform.gameObject.SetActive(false);
                     text.enabled = true;
+                    objectSpawning.batteriesInArea--;
                 }
             }
         }
 
         if (text.enabled)
         {
-            text.text = "Bodies collected " + bodiesCollected.ToString() + "/5";
+            text.text = "Batteries on hand: " + batteriesOwned.ToString();
             if (!disappear)
             {
                 time += Time.deltaTime;
@@ -52,7 +48,7 @@ public class InteractionScript : MonoBehaviour
                 text.alpha = (time / 2);
                 if (text.alpha <= 0f)
                 {
-                    time = 0f; 
+                    time = 0f;
                     disappear = false;
                     text.enabled = false;
                 }
@@ -61,7 +57,7 @@ public class InteractionScript : MonoBehaviour
             if (time >= 3f)
             {
                 disappear = true;
-            } 
+            }
         }
     }
 }
