@@ -80,12 +80,10 @@ public class CameraViews : MonoBehaviour
             }
             else
             {
-                Debug.Log("aaa");
                 enemyCam.enabled = true;
                 enemyViewEnabled = true;
                 staticImage.enabled = true;
                 enemyHueShift.active = true;
-                Debug.Log(staticImage.isActiveAndEnabled);
             }
         }
 

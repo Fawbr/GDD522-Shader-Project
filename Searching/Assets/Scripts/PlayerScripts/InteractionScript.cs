@@ -28,7 +28,6 @@ public class InteractionScript : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, playerCam.transform.TransformDirection(Vector3.forward), out hit, 10, layerMask))
             {
-                Debug.Log(hit.transform.name);
                 if (hit.transform.tag == "Item" && cameraView.thermalEnabled)
                 { 
                     bodiesCollected++;
@@ -63,5 +62,10 @@ public class InteractionScript : MonoBehaviour
                 disappear = true;
             } 
         }
+    }
+
+    void CheckObject()
+    {
+        
     }
 }

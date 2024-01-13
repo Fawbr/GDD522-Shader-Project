@@ -15,9 +15,9 @@ public class BatteryPickup : MonoBehaviour
     [SerializeField] CameraViews cameraView;
     [SerializeField] ObjectSpawning objectSpawning;
     // Update is called once per frame
+    
     void Update()
     {
-
         if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;

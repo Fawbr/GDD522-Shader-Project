@@ -31,7 +31,6 @@ public class EnemyPathfinding : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(enemyFOV.playerVisible);
         nMA.speed = enemySpeed;
         Transform waypointTransform = currentWaypoint.transform;
 
@@ -57,7 +56,6 @@ public class EnemyPathfinding : MonoBehaviour
         {
             nodeChoices.Add(node);
         }
-        Debug.Log(nodeChoices.Count);
         if (nodeChoices.Count > 1)
         {
             nextNodeInt = Random.Range(0, nodeChoices.Count);
@@ -78,7 +76,6 @@ public class EnemyPathfinding : MonoBehaviour
         {
             if (Vector3.Distance(playerTarget.transform.position, waypoints.transform.position) >= 20f)
             {
-                Debug.Log(Vector3.Distance(playerTarget.transform.position, waypoints.transform.position));
                 possibleNodes.Add(waypoints);
             }
         }
@@ -123,7 +120,6 @@ public class EnemyPathfinding : MonoBehaviour
         {
             nodesTravelled.Add(currentWaypoint);
             currentWaypoint = FindNextWayPoint();
-            Debug.Log(currentWaypoint.name);
         }
     }
 

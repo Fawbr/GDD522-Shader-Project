@@ -6,7 +6,7 @@ public class NewPlayerScript : MonoBehaviour
 {
     [Header("Input Readings")]
     [SerializeField] InputReader input;
-    Vector2 RawMoveInput;
+    public Vector2 RawMoveInput;
 
     [Header("Movment")]
     private CharacterController PlayerCC;
@@ -17,12 +17,10 @@ public class NewPlayerScript : MonoBehaviour
     private Vector3 velocity;
     public float gravity = -9.81f;
 
-
     [Header("Camera")]
     [SerializeField] Camera cam;
     [SerializeField] public MouseLook mouseLook = new MouseLook();
  
-
     [Header("Ground Check")]
     [SerializeField] Transform GroundPos;
     [SerializeField] float GroundCheckRadius = 0.3f;
@@ -31,7 +29,6 @@ public class NewPlayerScript : MonoBehaviour
     [Header("Player Stats")]
     [SerializeField]
     private int Health = 100;
-
 
     #region Unity Callbacks
 
@@ -65,10 +62,8 @@ public class NewPlayerScript : MonoBehaviour
 
     private void PlayerMovement()
     {
-
         if (IsGrounded() && velocity.y < 0)
         {
-            
           velocity.y = -2f;
         }
 
@@ -139,5 +134,4 @@ public class NewPlayerScript : MonoBehaviour
     }
 
     #endregion
-
 }

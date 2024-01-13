@@ -53,9 +53,13 @@ public class BatteryScript : MonoBehaviour
             flashlightBatteryDrain = false;
         }
 
-        if (flashlightBattery <= 0f)
+        if (flashlightBattery <= 1f)
         {
             flashlight.enabled = false;
+        }
+        else
+        {
+            flashlight.enabled = true;
         }
     }
 }
