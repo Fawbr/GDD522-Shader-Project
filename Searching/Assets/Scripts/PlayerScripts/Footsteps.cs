@@ -6,7 +6,12 @@ public class Footsteps : MonoBehaviour
 {
     [SerializeField] AudioSource footsteps;
     [SerializeField] AudioClip footstepLeft, footstepRight;
-    
+    Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
     public void LeftFootsteps()
     {
         footsteps.clip = footstepLeft;
@@ -17,5 +22,13 @@ public class Footsteps : MonoBehaviour
     {
         footsteps.clip = footstepRight;
         footsteps.Play();
+    }
+
+    public void StopWalking()
+    {
+        if (!animator.GetBool("isMoving"))
+        {
+            animator.Play("Idle");
+        }
     }
 }

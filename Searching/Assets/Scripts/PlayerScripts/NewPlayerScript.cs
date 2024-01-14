@@ -34,8 +34,7 @@ public class NewPlayerScript : MonoBehaviour
 
     private void Start()
     {
-        input.MoveEvent += HandelDirctionalInput;
-        input.JumpEvent += HandelJumpInput;
+        input.MoveEvent += HandleDirectionalInput;
         mouseLook.Init(transform, cam.transform,input);
         PlayerCC = GetComponent<CharacterController>();
     }
@@ -78,18 +77,6 @@ public class NewPlayerScript : MonoBehaviour
 
     #endregion
 
-    #region Jump
-
-    private void Jump()
-    {
-        if (IsGrounded())
-        {
-            velocity.y += Mathf.Sqrt(JumpHeight * -2f * gravity);
-        }
-    }
-
-    #endregion
-
     #region Checks
 
     public bool IsGrounded()
@@ -105,32 +92,18 @@ public class NewPlayerScript : MonoBehaviour
 
     #endregion
 
-    #region HandelEvents
+    #region HandleEvents
 
-    private void HandelDirctionalInput(Vector2 dir)
+    private void HandleDirectionalInput(Vector2 dir)
     {
         
         RawMoveInput = dir;
     }
 
-    private void HandelJumpInput()
-    {
-        Jump();
-    }
-
-    private void HandelPause()
+    private void HandlePause()
     {
         input.ToggleActionMaps(input._customInputs.UI);
 
-    }
-
-    #endregion
-
-    #region Interfaces
-    public void TakeDamage(int Damage)
-    {
-        Health -= Damage;
-        Debug.Log("health: " + Health);
     }
 
     #endregion
