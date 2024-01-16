@@ -8,17 +8,16 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: LiberationSans SDF Material
-  m_Shader: {fileID: -6465566751694194690, guid: 50e0de6f7786c324086331fd2dc5feb1, type: 3}
-  m_ValidKeywords:
-  - _ALPHATEST_ON
+  m_Shader: {fileID: -6465566751694194690, guid: ae6ac037ca504304995a18853340fbfc, type: 3}
+  m_ValidKeywords: []
   m_InvalidKeywords:
+  - _ALPHATEST_ON
   - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Transparent
+  stringTagMap: {}
   disabledShaderPasses:
   - DepthOnly
   - SHADOWCASTER
@@ -42,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 28684132378477856}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OutlineTex:
@@ -103,6 +102,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Reflectivity: 10
+    - _Scale: 500
     - _ScaleRatioA: 0.9
     - _ScaleRatioB: 0.73125
     - _ScaleRatioC: 0.73125
@@ -111,6 +111,7 @@ Material:
     - _ShaderFlags: 0
     - _Sharpness: 0
     - _SpecularPower: 2
+    - _Speed: 0
     - _SrcBlend: 5
     - _StaticScale: 100
     - _Stencil: 0

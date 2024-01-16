@@ -7,16 +7,20 @@ public class EnemyPathfinding : MonoBehaviour
     [SerializeField] Transform playerTarget;
     [SerializeField] GameObject currentWaypoint;
     [SerializeField] float enemySpeed = 3f;
+    [SerializeField] LayerMask layerMask;
     List<GameObject> nodeChoices = new List<GameObject>();
     List<GameObject> nodesTravelled = new List<GameObject>();
     GameObject[] allNodes;
     EnemyFieldOfView enemyFOV;
+    [SerializeField] public bool isWandering = true;
     Rigidbody rb;
     Animator enemyAnimator;
     GameObject nextNode;
     private NavMeshAgent nMA;
     int nextNodeInt;
-    float time;
+    float freezeTimer = 0f;
+    float aggressionTimer = 0f;
+    float huntingTimer = 0f;
     EnemyView enemyView;
     void Start()
     {
@@ -34,7 +38,27 @@ public class EnemyPathfinding : MonoBehaviour
         nMA.speed = enemySpeed;
         Transform waypointTransform = currentWaypoint.transform;
 
-        if (enemyFOV.playerVisible == true)
+        if (aggressionTimer > Random.Range(15f, 45f))
+        {
+            aggressionTimer = 0f;
+            isWandering = false;
+        }
+        if (huntingTimer > Random.Range(15f, 30f))
+        {
+            huntingTimer = 0f;
+            isWandering = true;
+        }
+
+        if (isWandering == true)
+        {
+            aggressionTimer += Time.deltaTime;
+        }
+        if (isWandering == false)
+        {
+            huntingTimer += Time.deltaTime;
+        }
+
+        if (enemyFOV.playerVisible == true || isWandering == false)
         {
             nMA.SetDestination(playerTarget.position);
             enemySpeed = 10f;
@@ -97,17 +121,17 @@ public class EnemyPathfinding : MonoBehaviour
                     rb.MoveRotation(Quaternion.LookRotation(playerTarget.transform.position - transform.position));
                     enemyAnimator.SetTrigger("Idling");
                     nMA.velocity = new Vector3(0, 0, 0);
-                    time += Time.deltaTime;
-                    if (time >= 3f)
+                    freezeTimer += Time.deltaTime;
+                    if (freezeTimer >= 3f)
                     {
                         EnemyTeleportAway();
-                        time = 0f;
+                        freezeTimer = 0f;
                     }
 
                 }
                 else
                 {
-                    time = 0f;
+                    freezeTimer = 0f;
                     enemySpeed = 5f;
                 }
             }
