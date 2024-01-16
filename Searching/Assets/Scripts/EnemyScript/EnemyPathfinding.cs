@@ -8,6 +8,7 @@ public class EnemyPathfinding : MonoBehaviour
     [SerializeField] GameObject currentWaypoint;
     [SerializeField] float enemySpeed = 3f;
     [SerializeField] LayerMask layerMask;
+    bool isSeen = false;
     List<GameObject> nodeChoices = new List<GameObject>();
     List<GameObject> nodesTravelled = new List<GameObject>();
     GameObject[] allNodes;
@@ -61,8 +62,10 @@ public class EnemyPathfinding : MonoBehaviour
         if (enemyFOV.playerVisible == true || isWandering == false)
         {
             nMA.SetDestination(playerTarget.position);
-            enemySpeed = 10f;
-            //nMA.speed = 7;
+            if (!isSeen)
+            {
+                enemySpeed = 10f;
+            }
             
         }
         else if (enemyFOV.playerVisible == false)
@@ -98,7 +101,7 @@ public class EnemyPathfinding : MonoBehaviour
         List<GameObject> possibleNodes = new List<GameObject>();
         foreach (GameObject waypoints in allNodes)
         {
-            if (Vector3.Distance(playerTarget.transform.position, waypoints.transform.position) >= 20f)
+            if (Vector3.Distance(playerTarget.transform.position, waypoints.transform.position) > 50f)
             {
                 possibleNodes.Add(waypoints);
             }
@@ -106,7 +109,9 @@ public class EnemyPathfinding : MonoBehaviour
 
         int chosenNode = Random.Range(0, possibleNodes.Count);
         nextNode = possibleNodes[chosenNode];
-        transform.position = new Vector3(possibleNodes[chosenNode].transform.position.x, transform.position.y, possibleNodes[chosenNode].transform.position.z);
+        //transform.position = new Vector3(possibleNodes[chosenNode].transform.position.x, transform.position.y, possibleNodes[chosenNode].transform.position.z);
+        nMA.Warp(new Vector3(possibleNodes[chosenNode].transform.position.x, transform.position.y, possibleNodes[chosenNode].transform.position.z));
+        possibleNodes.Clear();
     }
     private void OnTriggerStay(Collider other)
     {
@@ -117,6 +122,7 @@ public class EnemyPathfinding : MonoBehaviour
             {
                 if (hit.collider.gameObject.name == "Player" && enemyView.isVisible == true)
                 {
+                    isSeen = true;
                     enemySpeed = 0f;
                     rb.MoveRotation(Quaternion.LookRotation(playerTarget.transform.position - transform.position));
                     enemyAnimator.SetTrigger("Idling");
@@ -151,6 +157,7 @@ public class EnemyPathfinding : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            isSeen = false;
             enemyAnimator.SetTrigger("Moving");
             enemySpeed = 5f;
         }

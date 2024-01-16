@@ -7,6 +7,8 @@ using TMPro;
 public class JumpscareScript : MonoBehaviour
 {
     [SerializeField] GameObject player;
+    NewPlayerScript newPlayerScript;
+    CameraViews cameraViews;
     [SerializeField] Camera jumpscareCam;
     [SerializeField] RawImage jumpscareBackground;
     [SerializeField] Canvas UICanvas;
@@ -14,6 +16,8 @@ public class JumpscareScript : MonoBehaviour
     [SerializeField] Text jumpscareText;
     [SerializeField] LayerMask layerMask;
     [SerializeField] Camera playerCam;
+    [SerializeField] AudioSource staticSound;
+    [SerializeField] AudioSource playerSound;
     SceneManager sceneManager;
     EnemyPathfinding enemyPathfinding;
     bool playerLost = false;
@@ -24,6 +28,8 @@ public class JumpscareScript : MonoBehaviour
     private void Start()
     {
         enemyPathfinding = GetComponent<EnemyPathfinding>();
+        newPlayerScript = player.GetComponent<NewPlayerScript>();
+        cameraViews = player.GetComponentInChildren<CameraViews>();
     }
     // Update is called once per frame
     void Update()
@@ -37,29 +43,31 @@ public class JumpscareScript : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
-
-        if (Vector3.Distance(transform.position, player.transform.position) < 100f)
-        {
-            if (Physics.SphereCast(player.transform.position, 1, player.transform.TransformDirection(Vector3.back), out RaycastHit hit) && hit.transform.name == "Enemy" && jumpscareTimer > Random.Range(15, 30))
-            {
-                jumpscareTimer = 0f;
-                jumpscareText.text = "BEHIND YOU";
-                StartCoroutine("Jumpscare");
-            }
-        }
-
-        if (enemyPathfinding.isWandering == false)
-        {
-            if (huntingJumpscareInitiated == false)
-            {
-                huntingJumpscareInitiated = true;
-                jumpscareText.text = "RUN";
-                StartCoroutine("Jumpscare");
-            }
-        }
         else
         {
-            huntingJumpscareInitiated = false;
+            if (Vector3.Distance(transform.position, player.transform.position) < 100f)
+            {
+                if (Physics.SphereCast(player.transform.position, 1, player.transform.TransformDirection(Vector3.back), out RaycastHit hit) && hit.transform.name == "Enemy" && jumpscareTimer > Random.Range(15, 30))
+                {
+                    jumpscareTimer = 0f;
+                    jumpscareText.text = "BEHIND YOU";
+                    StartCoroutine("Jumpscare");
+                }
+            }
+
+            if (enemyPathfinding.isWandering == false)
+            {
+                if (huntingJumpscareInitiated == false)
+                {
+                    huntingJumpscareInitiated = true;
+                    jumpscareText.text = "RUN";
+                    StartCoroutine("Jumpscare");
+                }
+            }
+            else
+            {
+                huntingJumpscareInitiated = false;
+            }
         }
     }
 
@@ -67,7 +75,9 @@ public class JumpscareScript : MonoBehaviour
     {
         jumpscareText.enabled = true;
         jumpscareImage.enabled = true;
+        staticSound.Play();
         yield return new WaitForSeconds(0.5f);
+        staticSound.Stop();
         jumpscareImage.enabled = false;
         jumpscareText.enabled = false;
     }
@@ -77,12 +87,14 @@ public class JumpscareScript : MonoBehaviour
         if (collision.gameObject.name == "Player")
         {
             jumpscareBackground.enabled = true;
+            jumpscareText.enabled = true;
             jumpscareImage.enabled = true;
+            staticSound.Play();
+            playerSound.enabled = false;
             jumpscareText.text = "GOT YOU";
             jumpscareText.enabled = true;
-            player.SetActive(false);
-            playerCam.gameObject.SetActive(true);
-            UICanvas.enabled = false;
+            cameraViews.enabled = false;
+            newPlayerScript.enabled = false;
             playerLost = true;
         }
     }
